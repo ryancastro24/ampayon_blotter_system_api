@@ -19,11 +19,16 @@ const usersSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+
+    barangay_secretary: {
+      type: String,
+      required: true,
+    },
     city_code: {
       type: String,
       required: true,
     },
-    province_code: {
+    region_code: {
       type: String,
       required: true,
     },
