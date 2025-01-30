@@ -7,7 +7,7 @@ export async function addUser(req, res) {
     barangay_code,
     barangay_captain,
     city_code,
-    province_code,
+    region_code,
   } = req.body;
 
   if (
@@ -16,7 +16,7 @@ export async function addUser(req, res) {
     !barangay_code ||
     !barangay_captain ||
     !city_code ||
-    !province_code
+    !region_code
   ) {
     return res.status(400).send({ error: "Missing Fields" });
   }
