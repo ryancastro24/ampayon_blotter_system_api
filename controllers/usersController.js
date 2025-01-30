@@ -8,6 +8,7 @@ export async function addUser(req, res) {
     barangay_captain,
     city_code,
     region_code,
+    barangay_secretary,
   } = req.body;
 
   if (
@@ -30,7 +31,8 @@ export async function addUser(req, res) {
     barangay_code,
     barangay_captain,
     city_code,
-    province_code,
+    region_code,
+    barangay_secretary,
   });
 
   return res.status(200).send({ message: "User Succesfully Created!" });
