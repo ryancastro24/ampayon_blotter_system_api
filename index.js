@@ -6,8 +6,9 @@ import caseRoutes from "./routes/caseRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import cors from "cors";
 const app = express();
-app.use(cors());
+
 app.use(express.json());
+app.use(cors());
 app.use("/api/users", userRoutes);
 app.use("/api/cases", caseRoutes);
 app.use("/api/auth", authRoutes);
