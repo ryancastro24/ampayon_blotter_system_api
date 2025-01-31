@@ -9,6 +9,9 @@ export async function addUser(req, res) {
     city_code,
     region_code,
     barangay_secretary,
+    barangay_name,
+    city_name,
+    region_name,
   } = req.body;
 
   if (
@@ -17,7 +20,10 @@ export async function addUser(req, res) {
     !barangay_code ||
     !barangay_captain ||
     !city_code ||
-    !region_code
+    !region_code ||
+    !barangay_name ||
+    !city_name ||
+    !region_name
   ) {
     return res.status(400).send({ error: "Missing Fields" });
   }
@@ -33,6 +39,9 @@ export async function addUser(req, res) {
     city_code,
     region_code,
     barangay_secretary,
+    barangay_name,
+    city_name,
+    region_name,
   });
 
   return res.status(200).send({ message: "User Succesfully Created!" });
