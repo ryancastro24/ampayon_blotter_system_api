@@ -14,6 +14,19 @@ const caseSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    barangay_name: {
+      type: String,
+      required: true,
+    },
+
+    province_name: {
+      type: String,
+      required: true,
+    },
+    city_name: {
+      type: String,
+      required: true,
+    },
     barangay_code: {
       type: String,
       required: true,

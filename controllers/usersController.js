@@ -52,3 +52,44 @@ export async function getUsers(req, res) {
 
   return res.status(200).send(users);
 }
+
+// delete user
+
+export async function deleteUser(req, res) {
+  try {
+    const { id } = req.params;
+
+    const deletedUser = await usersModel.findByIdAndDelete(id);
+
+    if (!deletedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ message: "User deleted successfully", deletedUser });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+}
+
+// update user details
+
+export async function updateUser(req, res) {
+  try {
+    const { id } = req.params;
+    const updates = req.body;
+
+    const updatedUser = await usersModel.findByIdAndUpdate(
+      id,
+      { $set: updates },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ message: "User updated successfully", updatedUser });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+}

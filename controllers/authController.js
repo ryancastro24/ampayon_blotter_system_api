@@ -15,7 +15,6 @@ export async function loginUser(req, res) {
     return res.status(200).json({
       id: user._id,
       name: user.name,
-      position: user.position,
       token: generateToken(user._id),
     });
   } else {
