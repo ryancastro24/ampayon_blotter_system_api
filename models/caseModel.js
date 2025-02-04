@@ -6,7 +6,7 @@ const caseSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
-    province_code: {
+    region_code: {
       type: String,
       required: true,
     },
@@ -19,7 +19,7 @@ const caseSchema = mongoose.Schema(
       required: true,
     },
 
-    province_name: {
+    region_name: {
       type: String,
       required: true,
     },
