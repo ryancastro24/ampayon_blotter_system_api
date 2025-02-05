@@ -50,6 +50,11 @@ const usersSchema = mongoose.Schema(
     barangay_logo: {
       type: String,
     },
+
+    userType: {
+      type: String,
+      default: "user",
+    },
   },
   {
     timestamps: true,
