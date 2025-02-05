@@ -14,7 +14,12 @@ export async function loginUser(req, res) {
   if (user && isCorrectPassword) {
     return res.status(200).json({
       id: user._id,
-      name: user.name,
+      region_name: user.region_name,
+      city_name: user.city_name,
+      barangay_name: user.barangay_name,
+      userType: user.userType,
+      barangay_captain: user.barangay_captain,
+      barangay_secretary: user.barangay_secretary,
       token: generateToken(user._id),
     });
   } else {
