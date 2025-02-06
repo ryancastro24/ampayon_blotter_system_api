@@ -1,12 +1,14 @@
 import caseModel from "../models/caseModel.js";
-
+const { ObjectId } = mongoose.Types;
 export async function getCases(req, res) {
   const cases = await caseModel.find();
   return res.status(200).send(cases);
 }
 export async function getSpecificCases(req, res) {
   const id = req.params.id;
-  const cases = await caseModel.find({ userId: id });
+
+  const userId = new ObjectId(id);
+  const cases = await caseModel.find({ userId: userId });
   return res.status(200).send(cases);
 }
 
