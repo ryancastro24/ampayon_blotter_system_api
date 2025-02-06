@@ -7,42 +7,38 @@ export async function getCases(req, res) {
 
 export async function addCase(req, res) {
   const {
-    case_number,
-    region_code,
-    city_code,
-    barangay_code,
-    complanant_name,
-    complanant_number,
+    complainant_name,
+    complainant_number,
+    complainant_email,
     respondent_name,
     respondent_number,
-    complain,
-    appointment_date,
+    respondent_email,
+    case_description,
     barangay_captain,
     barangay_secretary,
-    status,
     region_name,
     city_name,
     barangay_name,
+    userId,
+    case_type,
   } = req.body;
 
   // if there are missing fields  return an error response
   if (
-    !case_number ||
-    !region_code ||
-    !city_code ||
-    !barangay_code ||
-    !complanant_name ||
-    !complanant_number ||
+    !complainant_name ||
+    !complainant_number ||
+    !complainant_email ||
     !respondent_name ||
     !respondent_number ||
-    !complain ||
-    !appointment_date ||
+    !respondent_email ||
+    !case_description ||
     !barangay_captain ||
     !barangay_secretary ||
-    !status ||
     !region_name ||
     !city_name ||
-    !barangay_name
+    !barangay_name ||
+    !userId ||
+    !case_type
   ) {
     return res.status(400).send({ error: "Missing Fields" });
   }

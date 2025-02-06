@@ -1,24 +1,20 @@
 import mongoose from "mongoose";
-
+import AutoIncrement from "mongoose-sequence"; // Import the package
 const caseSchema = mongoose.Schema(
   {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users", // Reference to the users collection
+      required: true, // Ensure a user is associated with the case
+    },
     case_number: {
       type: Number,
-      required: true,
-    },
-    region_code: {
-      type: String,
-      required: true,
-    },
-    city_code: {
-      type: String,
-      required: true,
+      unique: true, // Ensure uniqueness
     },
     barangay_name: {
       type: String,
       required: true,
     },
-
     region_name: {
       type: String,
       required: true,
@@ -27,15 +23,15 @@ const caseSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    barangay_code: {
+    complainant_name: {
       type: String,
       required: true,
     },
-    complanant_name: {
+    complainant_number: {
       type: String,
       required: true,
     },
-    complanant_number: {
+    complainant_email: {
       type: String,
       required: true,
     },
@@ -47,11 +43,11 @@ const caseSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    complain: {
+    respondent_email: {
       type: String,
       required: true,
     },
-    appointment_date: {
+    case_description: {
       type: String,
       required: true,
     },
@@ -65,22 +61,29 @@ const caseSchema = mongoose.Schema(
     },
     status: {
       type: String,
-      required: true,
+      default: "ongoing",
     },
     attempt1: {
       type: Boolean,
-      required: true,
       default: false,
+    },
+    attempt1Date: {
+      type: String,
     },
     attempt2: {
       type: Boolean,
-      required: true,
       default: false,
+    },
+
+    attempt2Date: {
+      type: String,
     },
     attempt3: {
       type: Boolean,
-      required: true,
       default: false,
+    },
+    attempt3Date: {
+      type: String,
     },
   },
   {
@@ -88,4 +91,5 @@ const caseSchema = mongoose.Schema(
   }
 );
 
+caseSchema.plugin(AutoIncrement(mongoose), { inc_field: "case_number" });
 export default mongoose.model("cases", caseSchema);
