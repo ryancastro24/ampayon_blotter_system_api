@@ -1,4 +1,5 @@
 import caseModel from "../models/caseModel.js";
+import mongoose from "mongoose";
 const { ObjectId } = mongoose.Types;
 export async function getCases(req, res) {
   const cases = await caseModel.find();
