@@ -24,6 +24,7 @@ export async function addCase(req, res) {
   } = req.body;
 
   // if there are missing fields  return an error response
+
   if (
     !complainant_name ||
     !complainant_number ||
