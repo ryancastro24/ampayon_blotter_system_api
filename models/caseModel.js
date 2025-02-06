@@ -51,6 +51,11 @@ const caseSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+
+    case_type: {
+      type: String,
+      required: true,
+    },
     barangay_captain: {
       type: String,
       required: true,

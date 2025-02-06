@@ -48,10 +48,6 @@ const usersSchema = mongoose.Schema(
       required: true,
     },
 
-    case_type: {
-      type: String,
-      required: true,
-    },
     barangay_logo: {
       type: String,
     },
