@@ -29,11 +29,17 @@ const caseSchema = mongoose.Schema(
     },
     complainant_number: {
       type: String,
-      required: true,
     },
+
     complainant_email: {
       type: String,
-      required: true,
+    },
+
+    complainant_profile_picture: {
+      type: String,
+    },
+    complainant_address: {
+      type: String,
     },
     respondent_name: {
       type: String,
@@ -41,17 +47,25 @@ const caseSchema = mongoose.Schema(
     },
     respondent_number: {
       type: String,
-      required: true,
     },
     respondent_email: {
       type: String,
-      required: true,
+    },
+    respondent_address: {
+      type: String,
+    },
+    respondent_profile_picture: {
+      type: String,
     },
     case_description: {
       type: String,
       required: true,
     },
 
+    documentationPhotos: {
+      type: [String], // Array of string URLs
+      default: [], // Default empty array
+    },
     case_type: {
       type: String,
       required: true,

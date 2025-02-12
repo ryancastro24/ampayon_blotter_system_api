@@ -16,11 +16,7 @@ export async function getSpecificCases(req, res) {
 export async function addCase(req, res) {
   const {
     complainant_name,
-    complainant_number,
-    complainant_email,
     respondent_name,
-    respondent_number,
-    respondent_email,
     case_description,
     barangay_captain,
     barangay_secretary,
@@ -35,11 +31,7 @@ export async function addCase(req, res) {
 
   if (
     !complainant_name ||
-    !complainant_number ||
-    !complainant_email ||
     !respondent_name ||
-    !respondent_number ||
-    !respondent_email ||
     !case_description ||
     !barangay_captain ||
     !barangay_secretary ||
