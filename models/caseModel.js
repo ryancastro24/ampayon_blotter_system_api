@@ -29,10 +29,12 @@ const caseSchema = mongoose.Schema(
     },
     complainant_number: {
       type: String,
+      default: "No Number Available",
     },
 
     complainant_email: {
       type: String,
+      default: "No Email Available",
     },
 
     complainant_profile_picture: {
@@ -47,9 +49,11 @@ const caseSchema = mongoose.Schema(
     },
     respondent_number: {
       type: String,
+      default: "No Number Available",
     },
     respondent_email: {
       type: String,
+      default: "No Email Available",
     },
     respondent_address: {
       type: String,
