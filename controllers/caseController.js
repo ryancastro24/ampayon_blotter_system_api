@@ -51,6 +51,20 @@ export async function addCase(req, res) {
   return res.status(200).send(casedata);
 }
 
+// get specific case only
+// url = api/cases/getSpecificCaseOnly/:id
+//method = GET
+export async function getSpecificCaseOnly(req, res) {
+  const { id } = req.params;
+
+  const caseData = await caseModel.findById(id);
+
+  if (!caseData) {
+    return res.status(400).send({ error: "No Case Exist!" });
+  }
+  return res.status(200).send(caseData);
+}
+
 export async function updateCase(req, res) {
   try {
     const { id } = req.params;
