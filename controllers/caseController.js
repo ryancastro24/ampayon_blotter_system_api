@@ -9,7 +9,7 @@ export async function getCases(req, res) {
 export async function getSpecificCases(req, res) {
   const id = req.params.id;
   const userId = new ObjectId(id);
-  const cases = await caseModel.find({ userId: userId });
+  const cases = await caseModel.find({ userId: userId, status: "ongoing" });
   return res.status(200).send(cases);
 }
 
