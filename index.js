@@ -85,14 +85,14 @@ app.put(
   }
 );
 
+import path from "path";
+
 app.put(
   "/api/cases/caseForms/:id",
   upload.single("file"), // Ensure "file" matches the form field name in the frontend
   async (req, res) => {
     try {
       const { id } = req.params;
-
-      console.log("this is the file", req.file);
 
       // ✅ Check if req.file is received
       if (!req.file) {
@@ -107,12 +107,20 @@ app.put(
         return res.status(404).json({ message: "Case not found" });
       }
 
-      // ✅ Upload the file to Cloudinary
+      // ✅ Extract the original filename without extension
+      const originalName = path.parse(req.file.originalname).name; // Gets the filename without extension
+      const safeFileName = originalName
+        .replace(/\s+/g, "_")
+        .replace(/[^a-zA-Z0-9_-]/g, ""); // Remove spaces and special chars
+
+      // ✅ Upload to Cloudinary using `public_id` to keep filename
       const result = await cloudinary.uploader.upload(req.file.path, {
-        folder: "documentation_photos", // Optional: Store in a specific Cloudinary folder
+        folder: "documentation_photos", // Store in a specific folder
+        public_id: safeFileName, // Use cleaned filename as public_id
+        resource_type: "auto", // Auto-detect file type
       });
 
-      // ✅ Push the uploaded image URL to documentationPhotos
+      // ✅ Store the formatted URL
       caseToUpdate.caseForms.push(result.secure_url);
 
       // Save the updated case
