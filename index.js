@@ -86,7 +86,7 @@ app.put(
 );
 
 app.put(
-  "/api/cases/caseFroms/:id",
+  "/api/cases/caseForms/:id",
   upload.single("file"), // Ensure "file" matches the form field name in the frontend
   async (req, res) => {
     try {
