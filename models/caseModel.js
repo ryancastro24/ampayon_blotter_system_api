@@ -70,6 +70,10 @@ const caseSchema = mongoose.Schema(
       type: [String], // Array of string URLs
       default: [], // Default empty array
     },
+    caseForms: {
+      type: [String], // Array of string URLs
+      default: [], // Default empty array
+    },
     case_type: {
       type: String,
       required: true,

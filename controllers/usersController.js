@@ -72,11 +72,19 @@ export async function deleteUser(req, res) {
 }
 
 // update user details
-
 export async function updateUser(req, res) {
   try {
     const { id } = req.params;
-    const updates = req.body;
+    let updates = req.body;
+
+    // If a password is provided and is not an empty string, hash it
+    if (updates.password && updates.password.trim() !== "") {
+      const saltRounds = 10;
+      updates.password = await bcrypt.hash(updates.password, saltRounds);
+    } else {
+      // Remove password from updates to keep the existing one
+      delete updates.password;
+    }
 
     const updatedUser = await usersModel.findByIdAndUpdate(
       id,
