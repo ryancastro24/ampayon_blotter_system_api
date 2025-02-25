@@ -48,7 +48,7 @@ export async function addUser(req, res) {
 }
 
 export async function getUsers(req, res) {
-  const users = await usersModel.find({ usertype: "user" });
+  const users = await usersModel.find({ userType: "user" });
 
   return res.status(200).send(users);
 }
