@@ -9,6 +9,7 @@ import {
   updateAttempt3,
   getSpecificCases,
   getSpecificCaseOnly,
+  getCasesGroupedByUser,
 } from "../controllers/caseController.js";
 const router = Router();
 
@@ -22,5 +23,6 @@ router.put("/attempt1/:id", updateAttempt1);
 router.put("/attempt2/:id", updateAttempt2);
 router.put("/attempt3/:id", updateAttempt3);
 router.get("/getSpecificCaseOnly/:id", getSpecificCaseOnly);
+router.get("/usercases/cases/data", getCasesGroupedByUser);
 
 export default router;

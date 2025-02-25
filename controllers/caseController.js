@@ -13,6 +13,61 @@ export async function getSpecificCases(req, res) {
   return res.status(200).send(cases);
 }
 
+export async function getCasesGroupedByUser(req, res) {
+  try {
+    const cases = await caseModel.aggregate([
+      {
+        $group: {
+          _id: "$userId",
+          ongoingCase: {
+            $sum: { $cond: [{ $eq: ["$status", "ongoing"] }, 1, 0] },
+          },
+          failedCase: {
+            $sum: { $cond: [{ $eq: ["$status", "failed"] }, 1, 0] },
+          },
+          settledCase: {
+            $sum: { $cond: [{ $eq: ["$status", "settled"] }, 1, 0] },
+          },
+          totalCases: { $sum: 1 },
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "_id", // Use `_id` directly since it's already an ObjectId
+          foreignField: "_id",
+          as: "userDetails",
+        },
+      },
+      {
+        $unwind: {
+          path: "$userDetails",
+          preserveNullAndEmptyArrays: true, // Keeps results even if user not found
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          userId: "$_id",
+          ongoingCase: 1,
+          failedCase: 1,
+          settledCase: 1,
+          totalCases: 1,
+          userDetails: {
+            barangay_name: "$userDetails.barangay_name",
+            city_name: "$userDetails.city_name",
+          },
+        },
+      },
+    ]);
+
+    return res.status(200).json(cases);
+  } catch (error) {
+    console.error("Error fetching cases:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
 export async function addCase(req, res) {
   const {
     complainant_name,
