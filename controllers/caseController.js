@@ -5,12 +5,30 @@ export async function getCases(req, res) {
   const cases = await caseModel.find();
   return res.status(200).send(cases);
 }
-
+// get all cases that are still ongoing
 export async function getSpecificCases(req, res) {
   const id = req.params.id;
   const userId = new ObjectId(id);
   const cases = await caseModel.find({ userId: userId, status: "ongoing" });
   return res.status(200).send(cases);
+}
+
+// get all cases that are failed or settled
+export async function getSpecificCasesSettledOrFailed(req, res) {
+  try {
+    const id = req.params.id;
+    const userId = new ObjectId(id);
+
+    const cases = await caseModel.find({
+      userId: userId,
+      status: { $in: ["settled", "failed"] }, // Match either "settled" or "failed"
+    });
+
+    return res.status(200).json(cases);
+  } catch (error) {
+    console.error("Error fetching cases:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
 }
 
 export async function getCasesGroupedByUser(req, res) {
@@ -250,5 +268,129 @@ export async function updateAttempt3(req, res) {
       .json({ message: "Case updated successfully", updateAttempt3 });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
+  }
+}
+
+// get cases but groupped
+
+export async function getGroupCases(req, res) {
+  try {
+    const id = req.params.id;
+    const userId = new ObjectId(id);
+
+    // Aggregate and count cases based on their status
+    const cases = await caseModel.aggregate([
+      { $match: { userId: userId } }, // Filter by user ID
+      {
+        $group: {
+          _id: "$status", // Group by status
+          count: { $sum: 1 }, // Count cases per status
+        },
+      },
+    ]);
+
+    // Default data with preset colors
+    const response = [
+      { id: 0, value: 0, label: "Failed", color: "#F44336" },
+      { id: 1, value: 0, label: "Ongoing", color: "#FF9800" },
+      { id: 2, value: 0, label: "Settled", color: "#4CAF50" },
+    ];
+
+    // Map aggregation results into the response array
+    cases.forEach((group) => {
+      const index = response.findIndex(
+        (item) => item.label.toLowerCase() === group._id
+      );
+      if (index !== -1) {
+        response[index].value = group.count;
+      }
+    });
+
+    return res.status(200).json(response);
+  } catch (error) {
+    console.error("Error fetching case counts:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+}
+
+// get permonth cases
+
+export async function getPermonthCases(req, res) {
+  try {
+    const id = req.params.id;
+    const userId = new ObjectId(id);
+
+    // Get current month (1-12)
+    const currentMonth = new Date().getMonth() + 1;
+
+    // Define month ranges based on current month
+    const isFirstHalf = currentMonth <= 6;
+    const monthRange = isFirstHalf
+      ? [1, 2, 3, 4, 5, 6] // Jan - Jun
+      : [7, 8, 9, 10, 11, 12]; // Jul - Dec
+
+    const monthLabels = {
+      1: "Jan",
+      2: "Feb",
+      3: "Mar",
+      4: "Apr",
+      5: "May",
+      6: "Jun",
+      7: "Jul",
+      8: "Aug",
+      9: "Sep",
+      10: "Oct",
+      11: "Nov",
+      12: "Dec",
+    };
+
+    // Aggregate cases grouped by month
+    const cases = await caseModel.aggregate([
+      { $match: { userId: userId } },
+      {
+        $group: {
+          _id: { $month: "$createdAt" }, // Group by month
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    // Default data structure with 0 cases for each selected month range
+    const caseData = monthRange.map((month) => ({
+      label: monthLabels[month],
+      value: 0,
+    }));
+
+    // Map aggregation results to the correct month in the range
+    cases.forEach((group) => {
+      const index = monthRange.indexOf(group._id);
+      if (index !== -1) {
+        caseData[index].value = group.count;
+      }
+    });
+
+    // Format response for BarChart
+    const response = {
+      xAxis: [
+        {
+          id: "barCategories",
+          data: caseData.map((entry) => entry.label), // Extract month names
+          scaleType: "band",
+        },
+      ],
+      series: [
+        {
+          data: caseData.map((entry) => entry.value), // Extract case counts
+          color: "#2196F3",
+        },
+      ],
+      width: 500,
+      height: 300,
+    };
+
+    return res.status(200).json(response);
+  } catch (error) {
+    console.error("Error fetching per-month case counts:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 }
