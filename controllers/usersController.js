@@ -48,9 +48,69 @@ export async function addUser(req, res) {
 }
 
 export async function getUsers(req, res) {
-  const users = await usersModel.find({ userType: "user" });
+  try {
+    const users = await usersModel.aggregate([
+      {
+        $match: { userType: "user" }, // Get only users with userType "user"
+      },
+      {
+        $lookup: {
+          from: "cases", // Collection storing cases
+          localField: "_id", // Match users._id
+          foreignField: "userId", // Match cases.userId
+          as: "cases", // Store results in `cases` array
+        },
+      },
+      {
+        $addFields: {
+          ongoingCase: {
+            $size: {
+              $filter: {
+                input: "$cases",
+                as: "case",
+                cond: { $eq: ["$$case.status", "ongoing"] },
+              },
+            },
+          },
+          failedCase: {
+            $size: {
+              $filter: {
+                input: "$cases",
+                as: "case",
+                cond: { $eq: ["$$case.status", "failed"] },
+              },
+            },
+          },
+          settledCase: {
+            $size: {
+              $filter: {
+                input: "$cases",
+                as: "case",
+                cond: { $eq: ["$$case.status", "settled"] },
+              },
+            },
+          },
+          totalCases: { $size: "$cases" }, // Count all cases
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          barangay_name: 1,
+          city_name: 1,
+          ongoingCase: 1,
+          failedCase: 1,
+          settledCase: 1,
+          totalCases: 1,
+        },
+      },
+    ]);
 
-  return res.status(200).send(users);
+    return res.status(200).json(users);
+  } catch (error) {
+    console.error("Error fetching users with cases:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
 }
 
 // delete user
