@@ -148,13 +148,21 @@ export async function updateUser(req, res) {
     const { id } = req.params;
     let updates = req.body;
 
-    // If a password is provided and is not an empty string, hash it
-    if (updates.password || updates.password.trim() !== "") {
+    // Filter out empty values
+    Object.keys(updates).forEach((key) => {
+      if (
+        updates[key] === "" ||
+        updates[key] === null ||
+        updates[key] === undefined
+      ) {
+        delete updates[key];
+      }
+    });
+
+    // If a password is provided and is not empty, hash it
+    if (updates.password) {
       const saltRounds = 10;
       updates.password = await bcrypt.hash(updates.password, saltRounds);
-    } else {
-      // Remove password from updates to keep the existing one
-      delete updates.password;
     }
 
     const updatedUser = await usersModel.findByIdAndUpdate(

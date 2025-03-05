@@ -5,6 +5,15 @@ export async function getCases(req, res) {
   const cases = await caseModel.find();
   return res.status(200).send(cases);
 }
+
+// get all cases
+export async function getAllCasesPerBarangay(req, res) {
+  const id = req.params.id;
+  const userId = new ObjectId(id);
+  const cases = await caseModel.find();
+  return res.status(200).send(cases);
+}
+
 // get all cases that are still ongoing
 export async function getSpecificCases(req, res) {
   const id = req.params.id;
