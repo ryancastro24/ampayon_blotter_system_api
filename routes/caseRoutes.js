@@ -13,6 +13,7 @@ import {
   getSpecificCasesSettledOrFailed,
   getGroupCases,
   getPermonthCases,
+  getAllCasesPerBarangay,
 } from "../controllers/caseController.js";
 const router = Router();
 
@@ -30,5 +31,6 @@ router.get("/usercases/cases/data", getCasesGroupedByUser);
 router.get("/archivecases/cases/data/:id", getSpecificCasesSettledOrFailed);
 router.get("/groupedcases/cases/data/:id", getGroupCases);
 router.get("/permonthCases/cases/data/:id", getPermonthCases);
+router.get("/allCasesPerBarangay/cases/data/:id", getAllCasesPerBarangay);
 
 export default router;
