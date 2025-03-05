@@ -10,7 +10,7 @@ export async function getCases(req, res) {
 export async function getAllCasesPerBarangay(req, res) {
   const id = req.params.id;
   const userId = new ObjectId(id);
-  const cases = await caseModel.find();
+  const cases = await caseModel.find({ userId: userId });
   return res.status(200).send(cases);
 }
 
