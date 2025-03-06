@@ -1,5 +1,16 @@
 import usersModel from "../models/usersModel.js";
 import bcrypt from "bcryptjs";
+
+export async function getUserDetails(req, res) {
+  const { id } = req.params;
+
+  const user = await usersModel.findById(id);
+
+  console.log(user);
+
+  return res.status(200).send(user);
+}
+
 export async function addUser(req, res) {
   const {
     username,
