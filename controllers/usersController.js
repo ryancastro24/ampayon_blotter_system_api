@@ -21,7 +21,11 @@ export async function addUser(req, res) {
     region_code,
     barangay_secretary,
     barangay_name,
+    province_name,
+    province_code,
     city_name,
+    barangay_captain_contact_number,
+    barangay_secretary_contact_number,
     region_name,
   } = req.body;
 
@@ -34,7 +38,9 @@ export async function addUser(req, res) {
     !region_code ||
     !barangay_name ||
     !city_name ||
-    !region_name
+    !region_name ||
+    !province_name ||
+    !province_code
   ) {
     return res.status(400).send({ error: "Missing Fields" });
   }
@@ -49,10 +55,14 @@ export async function addUser(req, res) {
     barangay_captain,
     city_code,
     region_code,
+    province_name,
+    province_code,
     barangay_secretary,
     barangay_name,
     city_name,
     region_name,
+    barangay_secretary_contact_number,
+    barangay_captain_contact_number,
   });
 
   return res.status(200).send({ message: "User Succesfully Created!" });

@@ -19,6 +19,7 @@ const caseSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+
     city_name: {
       type: String,
       required: true,
@@ -82,10 +83,12 @@ const caseSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+
     barangay_secretary: {
       type: String,
       required: true,
     },
+
     status: {
       type: String,
       default: "ongoing",

@@ -18,7 +18,18 @@ const usersSchema = mongoose.Schema(
       type: String,
     },
 
+    barangay_captain_contact_number: {
+      type: String,
+    },
     barangay_secretary: {
+      type: String,
+    },
+
+    barangay_secretary_contact_number: {
+      type: String,
+    },
+
+    barangay_email: {
       type: String,
     },
     city_code: {
@@ -28,6 +39,14 @@ const usersSchema = mongoose.Schema(
     city_name: {
       type: String,
     },
+    province_name: {
+      type: String,
+    },
+
+    province_code: {
+      type: String,
+    },
+
     region_code: {
       type: String,
     },

@@ -403,3 +403,40 @@ export async function getPermonthCases(req, res) {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 }
+
+export const getCasesGroupedByMonthAndBarangay = async (req, res) => {
+  try {
+    const cases = await caseModel.aggregate([
+      {
+        $group: {
+          _id: {
+            month: { $month: "$createdAt" },
+            barangay: "$barangay_name",
+          },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $sort: { "_id.month": 1 },
+      },
+    ]);
+
+    // Formatting the result into a structured object
+    const groupedCases = {};
+    cases.forEach(({ _id, count }) => {
+      const monthName = new Date(2025, _id.month - 1).toLocaleString("en-US", {
+        month: "long",
+      });
+
+      if (!groupedCases[monthName]) {
+        groupedCases[monthName] = {};
+      }
+      groupedCases[monthName][_id.barangay] = count;
+    });
+
+    res.status(200).json({ success: true, data: groupedCases });
+  } catch (error) {
+    console.error("Error fetching cases:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};

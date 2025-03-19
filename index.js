@@ -9,7 +9,7 @@ import { v2 as cloudinary } from "cloudinary";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import multer from "multer";
 import caseModel from "./models/caseModel.js";
-
+import twilio from "twilio";
 const app = express();
 
 cloudinary.config({
@@ -36,6 +36,10 @@ const upload = multer({ storage });
 
 connectDB();
 app.use(express.json());
+
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const client = twilio(accountSid, authToken);
 app.use(cors());
 app.use("/api/users", userRoutes);
 app.use("/api/cases", caseRoutes);
@@ -84,8 +88,6 @@ app.put(
     }
   }
 );
-
-import path from "path";
 
 app.put(
   "/api/cases/caseForms/:id",
@@ -136,6 +138,55 @@ app.put(
     }
   }
 );
+
+app.post("/send-sms", async (req, res) => {
+  // Extract required fields from request body
+  const { body, from, complanantNumber, respondentNumber } = req.body;
+
+  // Validate required fields
+  if (!body || !from || !complanantNumber || !respondentNumber) {
+    return res.status(400).json({
+      success: false,
+      error:
+        "Request must include 'body', 'from', 'complanantNumber' and 'respondentNumber'.",
+    });
+  }
+
+  try {
+    // Send SMS to both numbers concurrently
+    const [complainantMsg, respondentMsg] = await Promise.all([
+      client.messages.create({
+        body,
+        from,
+        to: complanantNumber,
+      }),
+      client.messages.create({
+        body,
+        from,
+        to: respondentNumber,
+      }),
+    ]);
+
+    res.json({
+      success: true,
+      messages: [
+        {
+          sid: complainantMsg.sid,
+          to: complainantMsg.to,
+          status: complainantMsg.status,
+        },
+        {
+          sid: respondentMsg.sid,
+          to: respondentMsg.to,
+          status: respondentMsg.status,
+        },
+      ],
+    });
+  } catch (error) {
+    console.error("Error sending SMS:", error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
 
 const port = process.env.PORT;
 app.listen(port, () => {
