@@ -201,3 +201,18 @@ export async function updateUser(req, res) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 }
+
+export async function getUserProfile(req, res) {
+  try {
+    const { id } = req.params;
+    const userData = await usersModel.findById(id);
+
+    if (!userData) {
+      return res.status(400).send({ error: "User not found!" });
+    }
+
+    return res.status(200).send(userData);
+  } catch (error) {
+    return res.status(400).send({ error: error });
+  }
+}
