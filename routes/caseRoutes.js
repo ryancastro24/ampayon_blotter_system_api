@@ -15,6 +15,9 @@ import {
   getPermonthCases,
   getAllCasesPerBarangay,
   getCasesGroupedByMonthAndBarangay,
+  getCasesGroupedByBarangay,
+  getAllCasesStatus,
+  getAllCasesPerMonth,
 } from "../controllers/caseController.js";
 const router = Router();
 
@@ -37,5 +40,8 @@ router.get(
   "/getCasesByMonthAndBarangay/data/",
   getCasesGroupedByMonthAndBarangay
 );
+router.get("/getCasesGroupedByBarangay/data/", getCasesGroupedByBarangay);
+router.get("/getAllCasesStatus/data/", getAllCasesStatus);
+router.get("/getAllCasesPerMonth/data/", getAllCasesPerMonth);
 
 export default router;

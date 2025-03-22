@@ -440,3 +440,124 @@ export const getCasesGroupedByMonthAndBarangay = async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
+export async function getCasesGroupedByBarangay(req, res) {
+  try {
+    const cases = await caseModel.aggregate([
+      {
+        $group: {
+          _id: "$barangay_name", // Group by barangay_name
+          failed: { $sum: { $cond: [{ $eq: ["$status", "failed"] }, 1, 0] } },
+          settled: { $sum: { $cond: [{ $eq: ["$status", "settled"] }, 1, 0] } },
+          ongoing: { $sum: { $cond: [{ $eq: ["$status", "ongoing"] }, 1, 0] } },
+        },
+      },
+      {
+        $match: {
+          $or: [
+            { failed: { $gt: 0 } },
+            { settled: { $gt: 0 } },
+            { ongoing: { $gt: 0 } },
+          ],
+        },
+      },
+      {
+        $project: {
+          _id: 0, // Exclude _id field
+          barangay_name: "$_id", // Rename _id to barangay_name
+          failed: 1,
+          settled: 1,
+          ongoing: 1,
+        },
+      },
+      { $sort: { barangay_name: 1 } }, // Sort by barangay_name alphabetically
+    ]);
+
+    if (!cases.length) {
+      return res.status(400).json({ error: "No Cases Exist!" });
+    }
+
+    return res.status(200).json(cases);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ error: "Internal Server Error", details: error.message });
+  }
+}
+
+export async function getAllCasesStatus(req, res) {
+  try {
+    const totalCases = await caseModel.aggregate([
+      {
+        $group: {
+          _id: null, // Merge all data into one
+          total_failed: {
+            $sum: { $cond: [{ $eq: ["$status", "failed"] }, 1, 0] },
+          },
+          total_settled: {
+            $sum: { $cond: [{ $eq: ["$status", "settled"] }, 1, 0] },
+          },
+          total_ongoing: {
+            $sum: { $cond: [{ $eq: ["$status", "ongoing"] }, 1, 0] },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0, // Exclude _id field
+          total_failed: 1,
+          total_settled: 1,
+          total_ongoing: 1,
+        },
+      },
+    ]);
+
+    if (!totalCases.length) {
+      return res.status(400).json({ error: "No Cases Exist!" });
+    }
+
+    return res.status(200).json(totalCases[0]); // Return a single object, not an array
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ error: "Internal Server Error", details: error.message });
+  }
+}
+
+export async function getAllCasesPerMonth(req, res) {
+  try {
+    const casesPerMonth = await caseModel.aggregate([
+      {
+        $group: {
+          _id: {
+            year: { $year: "$createdAt" }, // Extract year from createdAt
+            month: { $month: "$createdAt" }, // Extract month from createdAt
+          },
+          failed: { $sum: { $cond: [{ $eq: ["$status", "failed"] }, 1, 0] } },
+          settled: { $sum: { $cond: [{ $eq: ["$status", "settled"] }, 1, 0] } },
+          ongoing: { $sum: { $cond: [{ $eq: ["$status", "ongoing"] }, 1, 0] } },
+        },
+      },
+      {
+        $project: {
+          _id: 0, // Exclude _id field
+          month: "$_id.month",
+          year: "$_id.year",
+          failed: 1,
+          settled: 1,
+          ongoing: 1,
+        },
+      },
+      { $sort: { year: 1, month: 1 } }, // Sort by year and month
+    ]);
+
+    if (!casesPerMonth.length) {
+      return res.status(400).json({ error: "No Cases Exist!" });
+    }
+
+    return res.status(200).json(casesPerMonth);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ error: "Internal Server Error", details: error.message });
+  }
+}
