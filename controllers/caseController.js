@@ -594,6 +594,8 @@ export const removeDocumentationPhotos = async (req, res) => {
   try {
     const { caseId, photoUrls } = req.body;
 
+    console.log(photoUrls);
+
     if (!Array.isArray(photoUrls)) {
       return res.status(400).json({
         message: "photoUrls must be an array of URLs to remove",
