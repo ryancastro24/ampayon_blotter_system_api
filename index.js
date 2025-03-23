@@ -76,7 +76,7 @@ app.put(
       await caseToUpdate.save();
 
       res.status(200).json({
-        message: "File uploaded and case updated successfully",
+        message: "Documentation uploaded successfully",
         case: caseToUpdate,
       });
     } catch (error) {
@@ -126,7 +126,7 @@ app.put(
       await caseToUpdate.save();
 
       res.status(200).json({
-        message: "File uploaded and case updated successfully",
+        message: "File uploaded successfully",
         case: caseToUpdate,
       });
     } catch (error) {
