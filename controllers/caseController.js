@@ -561,3 +561,65 @@ export async function getAllCasesPerMonth(req, res) {
       .json({ error: "Internal Server Error", details: error.message });
   }
 }
+
+export const removeCaseForm = async (req, res) => {
+  try {
+    const { caseId, itemUrl } = req.body;
+
+    // Find the case and update it
+    const updatedCase = await caseModel.findByIdAndUpdate(
+      caseId,
+      { $pull: { caseForms: itemUrl } },
+      { new: true }
+    );
+
+    if (!updatedCase) {
+      return res.status(404).json({ message: "Case not found" });
+    }
+
+    res.status(200).json({
+      message: "Case form removed successfully",
+      updatedArray: updatedCase.caseForms,
+    });
+  } catch (error) {
+    console.error("Error removing case form:", error);
+    res.status(500).json({
+      message: "Error removing case form",
+      error: error.message,
+    });
+  }
+};
+
+export const removeDocumentationPhotos = async (req, res) => {
+  try {
+    const { caseId, photoUrls } = req.body;
+
+    if (!Array.isArray(photoUrls)) {
+      return res.status(400).json({
+        message: "photoUrls must be an array of URLs to remove",
+      });
+    }
+
+    // Find the case and update it
+    const updatedCase = await caseModel.findByIdAndUpdate(
+      caseId,
+      { $pull: { documentationPhotos: { $in: photoUrls } } },
+      { new: true }
+    );
+
+    if (!updatedCase) {
+      return res.status(404).json({ message: "Case not found" });
+    }
+
+    res.status(200).json({
+      message: "Documentation photos removed successfully",
+      updatedArray: updatedCase.documentationPhotos,
+    });
+  } catch (error) {
+    console.error("Error removing documentation photos:", error);
+    res.status(500).json({
+      message: "Error removing documentation photos",
+      error: error.message,
+    });
+  }
+};

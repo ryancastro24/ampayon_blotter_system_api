@@ -18,6 +18,8 @@ import {
   getCasesGroupedByBarangay,
   getAllCasesStatus,
   getAllCasesPerMonth,
+  removeCaseForm,
+  removeDocumentationPhotos,
 } from "../controllers/caseController.js";
 const router = Router();
 
@@ -43,5 +45,7 @@ router.get(
 router.get("/getCasesGroupedByBarangay/data/", getCasesGroupedByBarangay);
 router.get("/getAllCasesStatus/data/", getAllCasesStatus);
 router.get("/getAllCasesPerMonth/data/", getAllCasesPerMonth);
+router.post("/remove-case-form", removeCaseForm);
+router.post("/remove-documentation-photos", removeDocumentationPhotos);
 
 export default router;
