@@ -9,7 +9,7 @@ import { v2 as cloudinary } from "cloudinary";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import multer from "multer";
 import caseModel from "./models/caseModel.js";
-
+import path from "path";
 const app = express();
 
 cloudinary.config({
