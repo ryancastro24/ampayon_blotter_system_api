@@ -21,6 +21,7 @@ export async function loginUser(req, res) {
       barangay_captain: user.barangay_captain,
       barangay_secretary: user.barangay_secretary,
       token: generateToken(user._id),
+      barangay_profile_picture: user.barangay_profile_picture,
     });
   } else {
     return res.status(200).json({ error: "Incorrect password" });
