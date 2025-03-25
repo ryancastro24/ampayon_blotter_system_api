@@ -18,6 +18,10 @@ const usersSchema = mongoose.Schema(
       type: String,
     },
 
+    barangay_profile_picture: {
+      type: String,
+    },
+
     barangay_captain_contact_number: {
       type: String,
     },
