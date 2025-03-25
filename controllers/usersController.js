@@ -1,6 +1,6 @@
 import usersModel from "../models/usersModel.js";
 import bcrypt from "bcryptjs";
-
+import caseModel from "../models/caseModel.js";
 export async function getUserDetails(req, res) {
   const { id } = req.params;
 
@@ -94,13 +94,21 @@ export async function deleteUser(req, res) {
   try {
     const { id } = req.params;
 
+    // First, delete all cases associated with this user
+    const deletedCases = await caseModel.deleteMany({ userId: id });
+
+    // Then delete the user
     const deletedUser = await usersModel.findByIdAndDelete(id);
 
     if (!deletedUser) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.status(200).json({ message: "User deleted successfully", deletedUser });
+    res.status(200).json({
+      message: "User and associated cases deleted successfully",
+      deletedUser,
+      deletedCasesCount: deletedCases.deletedCount,
+    });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
