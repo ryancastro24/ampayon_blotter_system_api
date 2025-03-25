@@ -71,6 +71,7 @@ export async function getUsers(req, res) {
           userType: 1,
           barangay_captain: 1,
           barangay_secretary: 1,
+          barangay_profile_picture: 1,
           createdAt: 1,
           updatedAt: 1,
           ongoingCase: 1,
