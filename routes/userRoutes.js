@@ -8,7 +8,7 @@ import {
 } from "../controllers/usersController.js";
 const router = Router();
 
-routerget("/", getUsers);
+router.get("/", getUsers);
 router
   .delete("/:id", deleteUser)
   .put("/:id", updateUser)
