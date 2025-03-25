@@ -42,7 +42,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/cases", caseRoutes);
 app.use("/api/auth", authRoutes);
 
-app.post("/api/cases/addCase", upload.single("file"), async (req, res) => {
+app.post("/api/users/addUser", upload.single("file"), async (req, res) => {
   try {
     const {
       username,
