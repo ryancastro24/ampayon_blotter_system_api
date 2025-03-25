@@ -11,7 +11,7 @@ import multer from "multer";
 import caseModel from "./models/caseModel.js";
 import path from "path";
 import bcrypt from "bcryptjs";
-import usersModel from "./models/userModel.js";
+import usersModel from "./models/usersModel.js";
 const app = express();
 
 cloudinary.config({
