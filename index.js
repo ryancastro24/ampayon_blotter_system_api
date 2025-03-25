@@ -42,6 +42,78 @@ app.use("/api/users", userRoutes);
 app.use("/api/cases", caseRoutes);
 app.use("/api/auth", authRoutes);
 
+app.post("/api/cases/addCase", upload.single("file"), async (req, res) => {
+  try {
+    const {
+      username,
+      password,
+      barangay_code,
+      barangay_captain,
+      city_code,
+      region_code,
+      barangay_secretary,
+      barangay_name,
+      province_name,
+      province_code,
+      city_name,
+      barangay_captain_contact_number,
+      barangay_secretary_contact_number,
+      region_name,
+    } = req.body;
+
+    if (
+      !username ||
+      !password ||
+      !barangay_code ||
+      !barangay_captain ||
+      !city_code ||
+      !region_code ||
+      !barangay_name ||
+      !city_name ||
+      !region_name ||
+      !province_name ||
+      !province_code ||
+      !req.file
+    ) {
+      return res.status(400).send({ error: "Missing Fields" });
+    }
+
+    // Upload logo to Cloudinary
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: "barangay_logos",
+    });
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const user = await usersModel.create({
+      username,
+      password: hashedPassword,
+      barangay_code,
+      barangay_captain,
+      city_code,
+      region_code,
+      province_name,
+      province_code,
+      barangay_secretary,
+      barangay_name,
+      city_name,
+      region_name,
+      barangay_secretary_contact_number,
+      barangay_captain_contact_number,
+      barangay_profile_picture: result.secure_url,
+    });
+
+    return res.status(200).send({
+      message: "User Successfully Created!",
+      user,
+    });
+  } catch (error) {
+    console.error("Error creating user:", error);
+    return res.status(500).send({ error: "Internal Server Error" });
+  }
+});
+
 app.put(
   "/api/cases/uploadDocumentaryImages/:id",
   upload.single("file"), // Ensure "file" matches the form field name in the frontend

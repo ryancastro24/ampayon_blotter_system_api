@@ -11,63 +11,6 @@ export async function getUserDetails(req, res) {
   return res.status(200).send(user);
 }
 
-export async function addUser(req, res) {
-  const {
-    username,
-    password,
-    barangay_code,
-    barangay_captain,
-    city_code,
-    region_code,
-    barangay_secretary,
-    barangay_name,
-    province_name,
-    province_code,
-    city_name,
-    barangay_captain_contact_number,
-    barangay_secretary_contact_number,
-    region_name,
-  } = req.body;
-
-  if (
-    !username ||
-    !password ||
-    !barangay_code ||
-    !barangay_captain ||
-    !city_code ||
-    !region_code ||
-    !barangay_name ||
-    !city_name ||
-    !region_name ||
-    !province_name ||
-    !province_code
-  ) {
-    return res.status(400).send({ error: "Missing Fields" });
-  }
-
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(password, salt);
-
-  const user = await usersModel.create({
-    username,
-    password: hashedPassword,
-    barangay_code,
-    barangay_captain,
-    city_code,
-    region_code,
-    province_name,
-    province_code,
-    barangay_secretary,
-    barangay_name,
-    city_name,
-    region_name,
-    barangay_secretary_contact_number,
-    barangay_captain_contact_number,
-  });
-
-  return res.status(200).send({ message: "User Succesfully Created!" });
-}
-
 export async function getUsers(req, res) {
   try {
     const users = await usersModel.aggregate([

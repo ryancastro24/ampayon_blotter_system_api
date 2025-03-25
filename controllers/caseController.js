@@ -378,7 +378,6 @@ export async function getPermonthCases(req, res) {
       }
     });
 
-    // Format response for BarChart
     const response = {
       xAxis: [
         {
