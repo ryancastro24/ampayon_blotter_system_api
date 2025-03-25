@@ -88,6 +88,7 @@ app.post("/api/users/addUser", upload.single("file"), async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
+    console.log(result.secure_url);
     const user = await usersModel.create({
       username,
       password: hashedPassword,
@@ -106,6 +107,7 @@ app.post("/api/users/addUser", upload.single("file"), async (req, res) => {
       barangay_profile_picture: result.secure_url,
     });
 
+    console.log(user);
     return res.status(200).send({
       message: "User Successfully Created!",
       user,
