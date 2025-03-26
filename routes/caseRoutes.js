@@ -20,23 +20,8 @@ import {
   getAllCasesPerMonth,
   removeCaseForm,
   removeDocumentationPhotos,
-  updateComplainantProfilePicture,
 } from "../controllers/caseController.js";
-import multer from "multer";
-
 const router = Router();
-
-// Configure multer for file upload
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads/");
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + "-" + file.originalname);
-  },
-});
-
-const upload = multer({ storage: storage });
 
 router.get("/", getCases).post("/", addCase);
 router
@@ -62,10 +47,5 @@ router.get("/getAllCasesStatus/data/", getAllCasesStatus);
 router.get("/getAllCasesPerMonth/data/", getAllCasesPerMonth);
 router.post("/remove-case-form", removeCaseForm);
 router.post("/remove-documentation-photos", removeDocumentationPhotos);
-router.put(
-  "/:caseId/complainant-profile-picture",
-  upload.single("profile_picture"),
-  updateComplainantProfilePicture
-);
 
 export default router;
