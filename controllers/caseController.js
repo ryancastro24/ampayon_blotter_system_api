@@ -195,24 +195,96 @@ export async function updateAttempt1(req, res) {
     const { id } = req.params;
     const updates = req.body;
 
-    const updateAttempt1 = await caseModel.findByIdAndUpdate(
-      id,
-      {
-        $set: {
-          attempt1: true,
-          attempt1Date: date.toLocaleDateString(),
-        },
-      },
-      { new: true, runValidators: true }
-    );
+    // First find the case to validate phone numbers before updating
+    const existingCase = await caseModel.findById(id);
 
-    if (!updateAttempt1) {
+    if (!existingCase) {
       return res.status(404).json({ message: "Case not found" });
     }
 
-    res
-      .status(200)
-      .json({ message: "Case updated successfully", updateAttempt1 });
+    // Check if phone numbers exist and are valid
+    if (!existingCase.complainant_number || !existingCase.respondent_number) {
+      return res.status(200).json({
+        error: "Both complainant and respondent phone numbers are required",
+      });
+    }
+
+    // Basic phone number validation
+    const phoneRegex = /^\d{11}$/; // Assumes 11 digit phone numbers
+    if (
+      !phoneRegex.test(existingCase.complainant_number) ||
+      !phoneRegex.test(existingCase.respondent_number)
+    ) {
+      return res.status(200).json({
+        error: "Invalid phone number format. Numbers must be 11 digits.",
+      });
+    }
+
+    // Send SMS using Semaphore API
+    const apiKey = process.env.SEMAPHORE_API_KEY;
+    const message =
+      "PRIORITY CASE: This is your first attempt notification for your case.";
+
+    // Try sending SMS to both numbers
+    try {
+      const numbers = [
+        existingCase.complainant_number,
+        existingCase.respondent_number,
+      ];
+
+      const smsPromises = numbers.map((number) =>
+        fetch("https://api.semaphore.co/api/v4/messages", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            apikey: apiKey,
+            number: number,
+            message: message,
+          }),
+        })
+      );
+
+      const responses = await Promise.all(smsPromises);
+
+      // Check if all SMS were sent successfully
+      const allSMSSuccessful = responses.every((response) => response.ok);
+
+      if (!allSMSSuccessful) {
+        return res.status(500).json({
+          message: "Failed to send SMS to all recipients",
+        });
+      }
+
+      // Only update the case if both SMS were sent successfully
+      const updateAttempt1 = await caseModel.findByIdAndUpdate(
+        id,
+        {
+          $set: {
+            attempt1: true,
+            attempt1Date: date.toLocaleDateString(),
+            priority: true,
+          },
+        },
+        { new: true, runValidators: true }
+      );
+
+      for (const response of responses) {
+        console.log("Priority SMS sent successfully:", await response.json());
+      }
+
+      res.status(200).json({
+        message: "Priority case updated successfully",
+        updateAttempt1,
+      });
+    } catch (error) {
+      console.error("Error sending SMS:", error);
+      return res.status(500).json({
+        message: "Failed to send SMS notifications",
+        error: error.message,
+      });
+    }
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
@@ -225,25 +297,100 @@ export async function updateAttempt2(req, res) {
 
   try {
     const { id } = req.params;
+    const updates = req.body;
 
-    const updateAttempt2 = await caseModel.findByIdAndUpdate(
-      id,
-      {
-        $set: {
-          attempt2: true,
-          attempt2Date: date.toLocaleDateString(),
-        },
-      },
-      { new: true, runValidators: true }
-    );
+    // First find the case to validate phone numbers before updating
+    const existingCase = await caseModel.findById(id);
 
-    if (!updateAttempt2) {
+    if (!existingCase) {
       return res.status(404).json({ message: "Case not found" });
     }
 
-    res
-      .status(200)
-      .json({ message: "Case updated successfully", updateAttempt2 });
+    // Check if phone numbers exist and are valid
+    if (!existingCase.complainant_number || !existingCase.respondent_number) {
+      return res.status(200).json({
+        error: "Both complainant and respondent phone numbers are required",
+      });
+    }
+
+    // Basic phone number validation
+    const phoneRegex = /^\d{11}$/; // Assumes 11 digit phone numbers
+    if (
+      !phoneRegex.test(existingCase.complainant_number) ||
+      !phoneRegex.test(existingCase.respondent_number)
+    ) {
+      return res.status(200).json({
+        error: "Invalid phone number format. Numbers must be 11 digits.",
+      });
+    }
+
+    // Send SMS using Semaphore API
+    const apiKey = process.env.SEMAPHORE_API_KEY;
+    const message =
+      "SECOND ATTEMPT: This is your second attempt notification for your case.";
+
+    // Try sending SMS to both numbers
+    try {
+      const numbers = [
+        existingCase.complainant_number,
+        existingCase.respondent_number,
+      ];
+
+      const smsPromises = numbers.map((number) =>
+        fetch("https://api.semaphore.co/api/v4/messages", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            apikey: apiKey,
+            number: number,
+            message: message,
+          }),
+        })
+      );
+
+      const responses = await Promise.all(smsPromises);
+
+      // Check if all SMS were sent successfully
+      const allSMSSuccessful = responses.every((response) => response.ok);
+
+      if (!allSMSSuccessful) {
+        return res.status(500).json({
+          message: "Failed to send SMS to all recipients",
+        });
+      }
+
+      // Only update the case if both SMS were sent successfully
+      const updateAttempt2 = await caseModel.findByIdAndUpdate(
+        id,
+        {
+          $set: {
+            attempt2: true,
+            attempt2Date: date.toLocaleDateString(),
+          },
+        },
+        { new: true, runValidators: true }
+      );
+
+      for (const response of responses) {
+        console.log(
+          "Second attempt SMS sent successfully:",
+          await response.json()
+        );
+      }
+
+      res.status(200).json({
+        message: "Second attempt updated successfully",
+        updateAttempt2,
+      });
+    } catch (error) {
+      console.error("Error sending SMS:", error);
+      return res.status(500).json({
+        message: "Failed to send SMS notifications",
+        error: error.message,
+      });
+    }
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
@@ -256,25 +403,100 @@ export async function updateAttempt3(req, res) {
 
   try {
     const { id } = req.params;
+    const updates = req.body;
 
-    const updateAttempt3 = await caseModel.findByIdAndUpdate(
-      id,
-      {
-        $set: {
-          attempt3: true,
-          attempt3Date: date.toLocaleDateString(),
-        },
-      },
-      { new: true, runValidators: true }
-    );
+    // First find the case to validate phone numbers before updating
+    const existingCase = await caseModel.findById(id);
 
-    if (!updateAttempt3) {
+    if (!existingCase) {
       return res.status(404).json({ message: "Case not found" });
     }
 
-    res
-      .status(200)
-      .json({ message: "Case updated successfully", updateAttempt3 });
+    // Check if phone numbers exist and are valid
+    if (!existingCase.complainant_number || !existingCase.respondent_number) {
+      return res.status(200).json({
+        error: "Both complainant and respondent phone numbers are required",
+      });
+    }
+
+    // Basic phone number validation
+    const phoneRegex = /^\d{11}$/; // Assumes 11 digit phone numbers
+    if (
+      !phoneRegex.test(existingCase.complainant_number) ||
+      !phoneRegex.test(existingCase.respondent_number)
+    ) {
+      return res.status(200).json({
+        error: "Invalid phone number format. Numbers must be 11 digits.",
+      });
+    }
+
+    // Send SMS using Semaphore API
+    const apiKey = process.env.SEMAPHORE_API_KEY;
+    const message =
+      "FINAL ATTEMPT: This is your final attempt notification for your case.";
+
+    // Try sending SMS to both numbers
+    try {
+      const numbers = [
+        existingCase.complainant_number,
+        existingCase.respondent_number,
+      ];
+
+      const smsPromises = numbers.map((number) =>
+        fetch("https://api.semaphore.co/api/v4/messages", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            apikey: apiKey,
+            number: number,
+            message: message,
+          }),
+        })
+      );
+
+      const responses = await Promise.all(smsPromises);
+
+      // Check if all SMS were sent successfully
+      const allSMSSuccessful = responses.every((response) => response.ok);
+
+      if (!allSMSSuccessful) {
+        return res.status(500).json({
+          message: "Failed to send SMS to all recipients",
+        });
+      }
+
+      // Only update the case if both SMS were sent successfully
+      const updateAttempt3 = await caseModel.findByIdAndUpdate(
+        id,
+        {
+          $set: {
+            attempt3: true,
+            attempt3Date: date.toLocaleDateString(),
+          },
+        },
+        { new: true, runValidators: true }
+      );
+
+      for (const response of responses) {
+        console.log(
+          "Final attempt SMS sent successfully:",
+          await response.json()
+        );
+      }
+
+      res.status(200).json({
+        message: "Final attempt updated successfully",
+        updateAttempt3,
+      });
+    } catch (error) {
+      console.error("Error sending SMS:", error);
+      return res.status(500).json({
+        message: "Failed to send SMS notifications",
+        error: error.message,
+      });
+    }
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
