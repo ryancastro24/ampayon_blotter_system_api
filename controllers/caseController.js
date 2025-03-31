@@ -199,13 +199,14 @@ export async function updateAttempt1(req, res) {
     const existingCase = await caseModel.findById(id);
 
     if (!existingCase) {
-      return res.status(404).json({ message: "Case not found" });
+      return res.status(404).json({ message: "Case not found", caseId: id });
     }
 
     // Check if phone numbers exist and are valid
     if (!existingCase.complainant_number || !existingCase.respondent_number) {
       return res.status(200).json({
         error: "Both complainant and respondent phone numbers are required",
+        caseId: id,
       });
     }
 
@@ -217,6 +218,7 @@ export async function updateAttempt1(req, res) {
     ) {
       return res.status(200).json({
         error: "Invalid phone number format. Numbers must be 11 digits.",
+        caseId: id,
       });
     }
 
@@ -254,6 +256,7 @@ export async function updateAttempt1(req, res) {
       if (!allSMSSuccessful) {
         return res.status(500).json({
           message: "Failed to send SMS to all recipients",
+          caseId: id,
         });
       }
 
@@ -277,16 +280,22 @@ export async function updateAttempt1(req, res) {
       res.status(200).json({
         message: "Priority case updated successfully",
         updateAttempt1,
+        caseId: id,
       });
     } catch (error) {
       console.error("Error sending SMS:", error);
       return res.status(500).json({
         message: "Failed to send SMS notifications",
         error: error.message,
+        caseId: id,
       });
     }
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    res.status(500).json({
+      message: "Server error",
+      error: error.message,
+      caseId: req.params.id,
+    });
   }
 }
 
@@ -303,13 +312,14 @@ export async function updateAttempt2(req, res) {
     const existingCase = await caseModel.findById(id);
 
     if (!existingCase) {
-      return res.status(404).json({ message: "Case not found" });
+      return res.status(404).json({ message: "Case not found", caseId: id });
     }
 
     // Check if phone numbers exist and are valid
     if (!existingCase.complainant_number || !existingCase.respondent_number) {
       return res.status(200).json({
         error: "Both complainant and respondent phone numbers are required",
+        caseId: id,
       });
     }
 
@@ -321,6 +331,7 @@ export async function updateAttempt2(req, res) {
     ) {
       return res.status(200).json({
         error: "Invalid phone number format. Numbers must be 11 digits.",
+        caseId: id,
       });
     }
 
@@ -358,6 +369,7 @@ export async function updateAttempt2(req, res) {
       if (!allSMSSuccessful) {
         return res.status(500).json({
           message: "Failed to send SMS to all recipients",
+          caseId: id,
         });
       }
 
@@ -383,16 +395,22 @@ export async function updateAttempt2(req, res) {
       res.status(200).json({
         message: "Second attempt updated successfully",
         updateAttempt2,
+        caseId: id,
       });
     } catch (error) {
       console.error("Error sending SMS:", error);
       return res.status(500).json({
         message: "Failed to send SMS notifications",
         error: error.message,
+        caseId: id,
       });
     }
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    res.status(500).json({
+      message: "Server error",
+      error: error.message,
+      caseId: req.params.id,
+    });
   }
 }
 
@@ -409,13 +427,14 @@ export async function updateAttempt3(req, res) {
     const existingCase = await caseModel.findById(id);
 
     if (!existingCase) {
-      return res.status(404).json({ message: "Case not found" });
+      return res.status(404).json({ message: "Case not found", caseId: id });
     }
 
     // Check if phone numbers exist and are valid
     if (!existingCase.complainant_number || !existingCase.respondent_number) {
       return res.status(200).json({
         error: "Both complainant and respondent phone numbers are required",
+        caseId: id,
       });
     }
 
@@ -427,6 +446,7 @@ export async function updateAttempt3(req, res) {
     ) {
       return res.status(200).json({
         error: "Invalid phone number format. Numbers must be 11 digits.",
+        caseId: id,
       });
     }
 
@@ -464,6 +484,7 @@ export async function updateAttempt3(req, res) {
       if (!allSMSSuccessful) {
         return res.status(500).json({
           message: "Failed to send SMS to all recipients",
+          caseId: id,
         });
       }
 
@@ -489,16 +510,22 @@ export async function updateAttempt3(req, res) {
       res.status(200).json({
         message: "Final attempt updated successfully",
         updateAttempt3,
+        caseId: id,
       });
     } catch (error) {
       console.error("Error sending SMS:", error);
       return res.status(500).json({
         message: "Failed to send SMS notifications",
         error: error.message,
+        caseId: id,
       });
     }
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    res.status(500).json({
+      message: "Server error",
+      error: error.message,
+      caseId: req.params.id,
+    });
   }
 }
 
