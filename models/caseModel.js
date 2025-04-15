@@ -115,6 +115,22 @@ const caseSchema = mongoose.Schema(
     attempt3Date: {
       type: String,
     },
+    date_filed: {
+      type: String,
+    },
+    date_of_settlement: {
+      type: String,
+    },
+
+    nature_of_the_case: {
+      type: String,
+    },
+    point_of_agreement: {
+      type: String,
+    },
+    status_of_agreement: {
+      type: String,
+    },
   },
   {
     timestamps: true,
