@@ -109,8 +109,7 @@ export async function addCase(req, res) {
     case_type,
   } = req.body;
 
-  // if there are missing fields  return an error response
-
+  // if there are missing fields return an error response
   if (
     !complainant_name ||
     !respondent_name ||
@@ -126,9 +125,17 @@ export async function addCase(req, res) {
     return res.status(400).send({ error: "Missing Fields" });
   }
 
-  // create the case in the database
+  // Get the number of cases for the userId
+  const casesCount = await caseModel.countDocuments({ userId });
+  const caseNumber = `${
+    new Date().getMonth() + 1
+  }-${new Date().getFullYear()}-${String(casesCount + 1).padStart(3, "0")}`;
 
-  const casedata = await caseModel.create(req.body);
+  // Create the case in the database with the generated case_number
+  const casedata = await caseModel.create({
+    ...req.body,
+    case_number: caseNumber,
+  });
 
   return res.status(200).send(casedata);
 }

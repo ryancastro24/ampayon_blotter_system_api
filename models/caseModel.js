@@ -8,7 +8,7 @@ const caseSchema = mongoose.Schema(
       required: true, // Ensure a user is associated with the case
     },
     case_number: {
-      type: Number,
+      type: String,
       unique: true, // Ensure uniqueness
     },
     barangay_name: {
