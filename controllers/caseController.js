@@ -134,7 +134,7 @@ export async function addCase(req, res) {
   // Create the case in the database with the generated case_number
   const casedata = await caseModel.create({
     ...req.body,
-    case_number: caseNumber,
+    case_id_number: caseNumber,
   });
 
   return res.status(200).send(casedata);
