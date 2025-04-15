@@ -131,6 +131,9 @@ const caseSchema = mongoose.Schema(
     status_of_agreement: {
       type: String,
     },
+    remarks: {
+      type: String,
+    },
   },
   {
     timestamps: true,
