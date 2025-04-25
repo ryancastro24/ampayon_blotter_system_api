@@ -70,6 +70,9 @@ const caseSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    action_taken: {
+      type: String,
+    },
 
     documentationPhotos: {
       type: [String], // Array of string URLs
