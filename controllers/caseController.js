@@ -231,17 +231,22 @@ export async function updateAttempt1(req, res) {
 
     // Send SMS using Semaphore API
     const apiKey = process.env.SEMAPHORE_API_KEY;
-    const message =
-      "PRIORITY CASE: This is your first attempt notification for your case.";
 
-    // Try sending SMS to both numbers
+    // Create separate messages for complainant and respondent
+    const complainantMessage = `Good day! This is to inform you that the blotter proceeding for the complaint you 
+    filed against ${existingCase.respondent_name} regarding ${existingCase.case_description} is scheduled 
+    on ${updates.hearing_date} at ${updates.hearing_time}, to be held at Barangay Ampayon Hall. 
+    Your presence is required to proceed with the case. Please confirm receipt of this message. Thank you`;
+
+    const respondentMessage = `Good day! You are requested to attend a blotter proceeding regarding a complaint filed 
+    against you by ${existingCase.complainant_name} concerning ${existingCase.case_description}. 
+    The hearing is scheduled on ${updates.hearing_date} at ${update.hearing_time} aBarangay Ampayon Hall. Your presence 
+    is required to help resolve the matter. Please confirm receipt of this message. Thank you.`;
+
+    // Try sending SMS to both numbers with their respective messages
     try {
-      const numbers = [
-        existingCase.complainant_number,
-        existingCase.respondent_number,
-      ];
-
-      const smsPromises = numbers.map((number) =>
+      const smsPromises = [
+        // Send to complainant
         fetch("https://api.semaphore.co/api/v4/messages", {
           method: "POST",
           headers: {
@@ -249,11 +254,23 @@ export async function updateAttempt1(req, res) {
           },
           body: JSON.stringify({
             apikey: apiKey,
-            number: number,
-            message: message,
+            number: existingCase.complainant_number,
+            message: complainantMessage,
           }),
-        })
-      );
+        }),
+        // Send to respondent
+        fetch("https://api.semaphore.co/api/v4/messages", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            apikey: apiKey,
+            number: existingCase.respondent_number,
+            message: respondentMessage,
+          }),
+        }),
+      ];
 
       const responses = await Promise.all(smsPromises);
 
@@ -344,17 +361,22 @@ export async function updateAttempt2(req, res) {
 
     // Send SMS using Semaphore API
     const apiKey = process.env.SEMAPHORE_API_KEY;
-    const message =
-      "SECOND ATTEMPT: This is your second attempt notification for your case.";
 
-    // Try sending SMS to both numbers
+    // Create separate messages for complainant and respondent
+    const complainantMessage = `SECOND ATTEMPT: Good day! This is to inform you that the blotter proceeding for the complaint you 
+     filed against ${existingCase.respondent_name} regarding ${existingCase.case_description} is scheduled 
+     on ${updates.hearing_date} at ${updates.hearing_time}, to be held at Barangay Ampayon Hall. 
+     Your presence is required to proceed with the case. Please confirm receipt of this message. Thank you`;
+
+    const respondentMessage = `SECOND ATTEMPT: Good day! You are requested to attend a blotter proceeding regarding a complaint filed 
+     against you by ${existingCase.complainant_name} concerning ${existingCase.case_description}. 
+     The hearing is scheduled on ${updates.hearing_date} at ${update.hearing_time} aBarangay Ampayon Hall. Your presence 
+     is required to help resolve the matter. Please confirm receipt of this message. Thank you.`;
+
+    // Try sending SMS to both numbers with their respective messages
     try {
-      const numbers = [
-        existingCase.complainant_number,
-        existingCase.respondent_number,
-      ];
-
-      const smsPromises = numbers.map((number) =>
+      const smsPromises = [
+        // Send to complainant
         fetch("https://api.semaphore.co/api/v4/messages", {
           method: "POST",
           headers: {
@@ -362,11 +384,23 @@ export async function updateAttempt2(req, res) {
           },
           body: JSON.stringify({
             apikey: apiKey,
-            number: number,
-            message: message,
+            number: existingCase.complainant_number,
+            message: complainantMessage,
           }),
-        })
-      );
+        }),
+        // Send to respondent
+        fetch("https://api.semaphore.co/api/v4/messages", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            apikey: apiKey,
+            number: existingCase.respondent_number,
+            message: respondentMessage,
+          }),
+        }),
+      ];
 
       const responses = await Promise.all(smsPromises);
 
@@ -459,17 +493,22 @@ export async function updateAttempt3(req, res) {
 
     // Send SMS using Semaphore API
     const apiKey = process.env.SEMAPHORE_API_KEY;
-    const message =
-      "FINAL ATTEMPT: This is your final attempt notification for your case.";
 
-    // Try sending SMS to both numbers
+    // Create separate messages for complainant and respondent
+    const complainantMessage = `THIRD ATTEMPT: Good day! This is to inform you that the blotter proceeding for the complaint you 
+    filed against ${existingCase.respondent_name} regarding ${existingCase.case_description} is scheduled 
+    on ${updates.hearing_date} at ${updates.hearing_time}, to be held at Barangay Ampayon Hall. 
+    Your presence is required to proceed with the case. Please confirm receipt of this message. Thank you`;
+
+    const respondentMessage = `THIRD ATTEMPT: Good day! You are requested to attend a blotter proceeding regarding a complaint filed 
+    against you by ${existingCase.complainant_name} concerning ${existingCase.case_description}. 
+    The hearing is scheduled on ${updates.hearing_date} at ${update.hearing_time} aBarangay Ampayon Hall. Your presence 
+    is required to help resolve the matter. Please confirm receipt of this message. Thank you.`;
+
+    // Try sending SMS to both numbers with their respective messages
     try {
-      const numbers = [
-        existingCase.complainant_number,
-        existingCase.respondent_number,
-      ];
-
-      const smsPromises = numbers.map((number) =>
+      const smsPromises = [
+        // Send to complainant
         fetch("https://api.semaphore.co/api/v4/messages", {
           method: "POST",
           headers: {
@@ -477,11 +516,23 @@ export async function updateAttempt3(req, res) {
           },
           body: JSON.stringify({
             apikey: apiKey,
-            number: number,
-            message: message,
+            number: existingCase.complainant_number,
+            message: complainantMessage,
           }),
-        })
-      );
+        }),
+        // Send to respondent
+        fetch("https://api.semaphore.co/api/v4/messages", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            apikey: apiKey,
+            number: existingCase.respondent_number,
+            message: respondentMessage,
+          }),
+        }),
+      ];
 
       const responses = await Promise.all(smsPromises);
 
