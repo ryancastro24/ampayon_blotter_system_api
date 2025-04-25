@@ -233,15 +233,9 @@ export async function updateAttempt1(req, res) {
     const apiKey = process.env.SEMAPHORE_API_KEY;
 
     // Create separate messages for complainant and respondent
-    const complainantMessage = `Good day! This is to inform you that the blotter proceeding for the complaint you 
-    filed against ${existingCase.respondent_name} regarding ${existingCase.case_description} is scheduled 
-    on ${updates.hearing_date} at ${updates.hearing_time}, to be held at Barangay Ampayon Hall. 
-    Your presence is required to proceed with the case. Please confirm receipt of this message. Thank you`;
+    const complainantMessage = `Good day! This is to inform you that the blotter proceeding for the complaint you filed against ${existingCase.respondent_name} regarding ${existingCase.case_description} is scheduled on ${updates.hearing_date} at ${updates.hearing_time}, to be held at Barangay Ampayon Hall. Your presence is required to proceed with the case. Please confirm receipt of this message. Thank you`;
 
-    const respondentMessage = `Good day! You are requested to attend a blotter proceeding regarding a complaint filed 
-    against you by ${existingCase.complainant_name} concerning ${existingCase.case_description}. 
-    The hearing is scheduled on ${updates.hearing_date} at ${updates.hearing_time} aBarangay Ampayon Hall. Your presence 
-    is required to help resolve the matter. Please confirm receipt of this message. Thank you.`;
+    const respondentMessage = `Good day! You are requested to attend a blotter proceeding regarding a complaint filed against you by ${existingCase.complainant_name} concerning ${existingCase.case_description}. The hearing is scheduled on ${updates.hearing_date} at ${updates.hearing_time} aBarangay Ampayon Hall. Your presence is required to help resolve the matter. Please confirm receipt of this message. Thank you.`;
 
     // Try sending SMS to both numbers with their respective messages
     try {
@@ -363,15 +357,9 @@ export async function updateAttempt2(req, res) {
     const apiKey = process.env.SEMAPHORE_API_KEY;
 
     // Create separate messages for complainant and respondent
-    const complainantMessage = `SECOND ATTEMPT: Good day! This is to inform you that the blotter proceeding for the complaint you 
-     filed against ${existingCase.respondent_name} regarding ${existingCase.case_description} is scheduled 
-     on ${updates.hearing_date} at ${updates.hearing_time}, to be held at Barangay Ampayon Hall. 
-     Your presence is required to proceed with the case. Please confirm receipt of this message. Thank you`;
+    const complainantMessage = `SECOND ATTEMPT: Good day! This is to inform you that the blotter proceeding for the complaint you filed against ${existingCase.respondent_name} regarding ${existingCase.case_description} is scheduled on ${updates.hearing_date} at ${updates.hearing_time}, to be held at Barangay Ampayon Hall. Your presence is required to proceed with the case. Please confirm receipt of this message. Thank you`;
 
-    const respondentMessage = `SECOND ATTEMPT: Good day! You are requested to attend a blotter proceeding regarding a complaint filed 
-     against you by ${existingCase.complainant_name} concerning ${existingCase.case_description}. 
-     The hearing is scheduled on ${updates.hearing_date} at ${update.hearing_time} aBarangay Ampayon Hall. Your presence 
-     is required to help resolve the matter. Please confirm receipt of this message. Thank you.`;
+    const respondentMessage = `SECOND ATTEMPT: Good day! You are requested to attend a blotter proceeding regarding a complaint filed against you by ${existingCase.complainant_name} concerning ${existingCase.case_description}. The hearing is scheduled on ${updates.hearing_date} at ${updates.hearing_time} aBarangay Ampayon Hall. Your presence is required to help resolve the matter. Please confirm receipt of this message. Thank you.`;
 
     // Try sending SMS to both numbers with their respective messages
     try {
@@ -495,15 +483,9 @@ export async function updateAttempt3(req, res) {
     const apiKey = process.env.SEMAPHORE_API_KEY;
 
     // Create separate messages for complainant and respondent
-    const complainantMessage = `THIRD ATTEMPT: Good day! This is to inform you that the blotter proceeding for the complaint you 
-    filed against ${existingCase.respondent_name} regarding ${existingCase.case_description} is scheduled 
-    on ${updates.hearing_date} at ${updates.hearing_time}, to be held at Barangay Ampayon Hall. 
-    Your presence is required to proceed with the case. Please confirm receipt of this message. Thank you`;
+    const complainantMessage = `THIRD ATTEMPT: Good day! This is to inform you that the blotter proceeding for the complaint you filed against ${existingCase.respondent_name} regarding ${existingCase.case_description} is scheduled on ${updates.hearing_date} at ${updates.hearing_time}, to be held at Barangay Ampayon Hall. Your presence is required to proceed with the case. Please confirm receipt of this message. Thank you`;
 
-    const respondentMessage = `THIRD ATTEMPT: Good day! You are requested to attend a blotter proceeding regarding a complaint filed 
-    against you by ${existingCase.complainant_name} concerning ${existingCase.case_description}. 
-    The hearing is scheduled on ${updates.hearing_date} at ${update.hearing_time} aBarangay Ampayon Hall. Your presence 
-    is required to help resolve the matter. Please confirm receipt of this message. Thank you.`;
+    const respondentMessage = `THIRD ATTEMPT: Good day! You are requested to attend a blotter proceeding regarding a complaint filed against you by ${existingCase.complainant_name} concerning ${existingCase.case_description}. The hearing is scheduled on ${updates.hearing_date} at ${updates.hearing_time} aBarangay Ampayon Hall. Your presence is required to help resolve the matter. Please confirm receipt of this message. Thank you.`;
 
     // Try sending SMS to both numbers with their respective messages
     try {
