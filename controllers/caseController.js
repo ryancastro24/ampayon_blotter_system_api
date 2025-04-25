@@ -240,7 +240,7 @@ export async function updateAttempt1(req, res) {
 
     const respondentMessage = `Good day! You are requested to attend a blotter proceeding regarding a complaint filed 
     against you by ${existingCase.complainant_name} concerning ${existingCase.case_description}. 
-    The hearing is scheduled on ${updates.hearing_date} at ${update.hearing_time} aBarangay Ampayon Hall. Your presence 
+    The hearing is scheduled on ${updates.hearing_date} at ${updates.hearing_time} aBarangay Ampayon Hall. Your presence 
     is required to help resolve the matter. Please confirm receipt of this message. Thank you.`;
 
     // Try sending SMS to both numbers with their respective messages
